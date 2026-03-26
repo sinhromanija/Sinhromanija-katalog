@@ -99,9 +99,30 @@ div.innerHTML = `<img src="https://www.bing.com/th?q=${searchTerm}&w=150&h=220&c
     });
 
     function updateBadge() {
-        const b = document.getElementById('statusBadge');
-        if (selectedMovies.length > 30) { b.innerText = "VEĆI PAKET"; b.className = "status-badge bg-veci"; }
-        else { b.innerText = "STANDARD PAKET"; b.className = "status-badge bg-standard"; }
+    const count = selectedMovies.length;
+    const badge = document.getElementById('statusBadge');
+    const finalPack = document.getElementById('finalPackage');
+    const finalPrice = document.getElementById('finalPrice');
+    const hiddenCrtaci = document.getElementById('hiddenCrtaci');
+
+    // Ažuriraj skriveno polje za bazu
+    hiddenCrtaci.value = selectedMovies.join(", ");
+    document.getElementById('finalCount').innerText = count;
+
+    if (count > 30) {
+        // CENA ZA PREKO 30
+        badge.innerText = "VEĆI PAKET (2300 din)";
+        badge.className = "status-badge bg-veci";
+        finalPack.innerText = "VEĆI PAKET";
+        finalPrice.innerText = "2300";
+    } else {
+        // CENA ZA DO 30
+        badge.innerText = "STANDARD PAKET (1800 din)";
+        badge.className = "status-badge bg-standard";
+        finalPack.innerText = "Standard";
+        finalPrice.innerText = "1800";
+    }
+}
     }
 
     // SLANJE PODATAKA
