@@ -112,44 +112,6 @@ div.innerHTML = `<img src="https://www.bing.com/th?q=${searchTerm}&w=150&h=220&c
           .then(response => alert('Uspešno poslato! Vaša narudžbina je primljena.'))
           .catch(error => console.error('Greška!', error.message));
     });
-</script> const scriptURL = 'OVDE_ZALEPI_SVOJ_NOVI_WEB_APP_URL';
-    const form = document.forms['google-sheet'];
-
-    form.addEventListener('submit', e => {
-        e.preventDefault();
-        
-        // Osigurajmo da su crtaći ubačeni u skriveno polje pre slanja
-        document.getElementById('hiddenCrtaci').value = selectedMovies.join(", ");
-        
-        if(selectedMovies.length === 0) { 
-            alert("Molimo izaberite barem jedan crtać pre slanja!"); 
-            return; 
-        }
-
-        // Vizuelna povratna informacija da se šalje
-        const btn = form.querySelector('.btn-order');
-        btn.innerText = "SLANJE U TOKU...";
-        btn.disabled = true;
-
-        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-          .then(response => {
-              alert('Uspešno poslato! Vaša narudžbina je u tabeli.');
-              btn.innerText = "POŠALJI NARUDŽBINU";
-              btn.disabled = false;
-              form.reset();
-              selectedMovies = [];
-              updateBadge();
-              // Resetuj vizuelno izabrane kartice
-              document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
-              document.getElementById('currentCount').innerText = "0";
-          })
-          .catch(error => {
-              console.error('Greška!', error.message);
-              alert('Došlo je do greške prilikom slanja. Pokušajte ponovo.');
-              btn.innerText = "POŠALJI NARUDŽBINU";
-              btn.disabled = false;
-          });
-    });
-
+</script> 
 </body>
 </html>
