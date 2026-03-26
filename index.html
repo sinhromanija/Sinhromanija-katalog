@@ -73,8 +73,9 @@
     spisak.forEach(naslov => {
         const div = document.createElement('div');
         div.className = 'card';
-        const searchTerm = encodeURIComponent(naslov + " Disney Poster");
-        div.innerHTML = `<img src="https://external-content.duckduckgo.com/iu/?u=https://tse1.mm.bing.net/th?q=${searchTerm}&f=1" alt="Poster"><div class="card-title">${naslov}</div>`;
+        const searchTerm = encodeURIComponent(naslov + " animated movie poster");
+div.innerHTML = `<img src="https://www.bing.com/th?q=${searchTerm}&w=150&h=220&c=7&rs=1&p=0&dpr=1&pid=wp" alt="Poster" loading="lazy">
+<div class="card-title">${naslov}</div>`;
         
         div.onclick = function() {
             if (div.classList.contains('selected')) {
