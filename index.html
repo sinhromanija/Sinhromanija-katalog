@@ -15,7 +15,6 @@
         .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
         .card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; border: 3px solid transparent; position: relative; height: 260px; display: flex; flex-direction: column; }
-        .card:hover { transform: scale(1.03); }
         .card.selected { border-color: var(--accent); box-shadow: 0 0 15px rgba(0,123,255,0.4); }
         .card.selected::before { content: "✓"; position: absolute; top: 5px; right: 5px; background: var(--accent); color: white; width: 25px; height: 25px; border-radius: 50%; font-size: 16px; line-height: 25px; font-weight: bold; z-index: 5; }
         .card img { width: 100%; height: 180px; object-fit: cover; background: #ddd; }
@@ -38,12 +37,10 @@
 
 <div class="container">
     <div class="grid" id="movieGrid"></div>
-
     <div class="order-form">
         <h2>📦 Podaci za porudžbinu</h2>
         <div class="summary-box">
             <strong>Vaš izbor:</strong> <span id="finalCount">0</span> crtaća.<br>
-            <strong>Paket:</strong> <span id="finalPackage">Standard</span><br>
             <strong>Cena: <span id="finalPrice">1800</span> din</strong>
         </div>
         <form id="disneyForm" name="google-sheet">
@@ -52,7 +49,7 @@
             <div class="form-group"><label>Grad</label><input type="text" name="grad" required></div>
             <div class="form-group"><label>Broj telefona</label><input type="tel" name="telefon" required></div>
             <input type="hidden" name="izabrani_crtaci" id="hiddenCrtaci">
-            <button type="submit" class="btn-order">POŠALJI NARUDŽBINU</button>
+            <button type="submit" class="btn-order" id="submitBtn">POŠALJI NARUDŽBINU</button>
         </form>
     </div>
 </div>
@@ -67,8 +64,8 @@
         const div = document.createElement('div');
         div.className = 'card';
         const imgNum = index + 1;
-        // Pokušava da učita tvoju sliku, ako ne uspe (onerror), stavlja sivu boju
-        div.innerHTML = `<img src="${imgNum}.jpg" alt="${naslov}" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mN8/x8AAuMB8dt6BQ0AAAAASUVORK5CYII='">
+        // Pokušaj učitavanja ručne slike, ako nema - ostaje sivo dok ne dodaš slike na GitHub
+        div.innerHTML = `<img src="${imgNum}.jpg" alt="${naslov}" onerror="this.style.display='none'">
                         <div class="card-title">${naslov}</div>`;
         
         div.onclick = function() {
@@ -89,35 +86,43 @@
         document.getElementById('currentCount').innerText = count;
         document.getElementById('finalCount').innerText = count;
         document.getElementById('hiddenCrtaci').value = selectedMovies.join(", ");
+        
         const badge = document.getElementById('statusBadge');
-        const finalPack = document.getElementById('finalPackage');
         const finalPrice = document.getElementById('finalPrice');
 
         if (count > 30) {
             badge.innerText = "VEĆI PAKET (2300 din)";
             badge.className = "status-badge bg-veci";
-            finalPack.innerText = "VEĆI PAKET";
             finalPrice.innerText = "2300";
         } else {
             badge.innerText = "STANDARD PAKET (1800 din)";
             badge.className = "status-badge bg-standard";
-            finalPack.innerText = "Standard";
             finalPrice.innerText = "1800";
         }
     }
 
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzkn033zhenuzw1KVuiIHPtRcXlTCnXrpoa-ooFJaodcvGFrJw2sjwDQhrt8NyrSrG4/exec'; 
-    const form = document.forms['google-sheet'];
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbz4jsDOYNRXJy3DtYkGNelIhkajqDGcySvYAKf4nZfihQrOsdzsrNBU30dtKVEaRC4T/exec'; 
 
-    form.addEventListener('submit', e => {
+    document.getElementById('disneyForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        if(selectedMovies.length === 0) { alert("Izaberi crtaće!"); return; }
-        const btn = form.querySelector('.btn-order');
-        btn.innerText = "SLANJE..."; btn.disabled = true;
+        if(selectedMovies.length === 0) { alert("Prvo izaberite crtaće!"); return; }
+        
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = "SLANJE...";
+        btn.disabled = true;
 
-        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-          .then(response => { alert('Uspešno poslato!'); location.reload(); })
-          .catch(error => { alert('Greška!'); btn.innerText = "POŠALJI NARUDŽBINU"; btn.disabled = false; });
+        fetch(scriptURL, { method: 'POST', body: new FormData(this)})
+          .then(res => res.json())
+          .then(response => {
+              alert('Uspešno! Narudžbina je primljena.');
+              location.reload();
+          })
+          .catch(error => {
+              console.error(error);
+              alert('Greška! Proverite URL skripte.');
+              btn.innerText = "POŠALJI NARUDŽBINU";
+              btn.disabled = false;
+          });
     });
 </script>
 </body>
