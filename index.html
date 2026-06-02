@@ -8,56 +8,88 @@
         :root { --primary: #051937; --standard: #2ecc71; --veci: #f1c40f; --accent: #007bff; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding-bottom: 50px; text-align: center; }
         
-        /* Stilovi za zaglavlje */
-        .header { position: sticky; top: 0; z-index: 1000; background: var(--primary); color: white; padding: 20px 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-        .header-intro { font-size: 1.2rem; margin: 5px 0 12px 0; }
-        .paketi-info { background: rgba(255, 255, 255, 0.1); display: inline-block; padding: 10px 20px; border-radius: 8px; margin: 10px 0; text-align: left; }
-        .paketi-info p { margin: 5px 0; font-size: 1rem; }
-        .dostava-info { font-size: 1rem; font-weight: bold; color: #f1c40f; margin: 5px 0; }
-        .carolija-text { font-style: italic; font-size: 0.95rem; opacity: 0.9; margin: 8px 0; }
+        /* Stilovi za zaglavlje - fiksirano samo na desktopu */
+        .header { 
+            position: relative; /* Podrazumevano nije fiksirano */
+            z-index: 1000; 
+            background: var(--primary); 
+            color: white; 
+            padding: 15px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
+        }
+
+        @media (min-width: 768px) {
+            .header { position: sticky; top: 0; }
+        }
+
+        .header h1 { margin: 0 0 5px 0; letter-spacing: 2px; font-size: 1.8rem; }
+        .header-intro { font-size: 1rem; margin: 5px 0; }
         
-        /* Brojač i komponente */
-        .counter-box { font-size: 1.4rem; font-weight: bold; margin: 10px 0 5px 0; }
-        .status-badge { display: inline-block; padding: 6px 20px; border-radius: 20px; font-size: 0.9rem; text-transform: uppercase; font-weight: bold; }
+        .paketi-info { 
+            background: rgba(255, 255, 255, 0.1); 
+            display: inline-block; 
+            padding: 8px 15px; 
+            border-radius: 8px; 
+            margin: 5px 0; 
+            text-align: left; 
+        }
+        .paketi-info p { margin: 2px 0; font-size: 0.9rem; }
+        .dostava-info { font-size: 0.9rem; font-weight: bold; color: #f1c40f; margin: 3px 0; }
+        .carolija-text { font-style: italic; font-size: 0.85rem; opacity: 0.9; margin: 5px 0; display: block; }
+        
+        .counter-box { font-size: 1.2rem; font-weight: bold; margin: 10px 0 5px 0; }
+        .status-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; text-transform: uppercase; font-weight: bold; }
+
+        /* Grid i kartice */
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 10px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+        
+        .card { 
+            background: white; border-radius: 8px; overflow: hidden; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer; 
+            transition: 0.3s; border: 3px solid transparent; 
+            position: relative; height: 240px; display: flex; flex-direction: column; 
+        }
+        .card:hover { transform: translateY(-3px); }
+        .card.selected { border-color: var(--accent); }
+        .card.selected::before { 
+            content: "✓"; position: absolute; top: 5px; right: 5px; 
+            background: var(--accent); color: white; width: 22px; height: 22px; 
+            border-radius: 50%; font-size: 14px; line-height: 22px; font-weight: bold; z-index: 5; 
+        }
+        .card img { width: 100%; height: 160px; object-fit: cover; background: #ddd; }
+        .card-title { 
+            padding: 5px; font-size: 0.7rem; font-weight: 600; color: #333; 
+            flex-grow: 1; display: flex; align-items: center; justify-content: center; 
+            background: #f8f9fa; 
+        }
+        
+        /* Forma */
+        .order-form { background: white; max-width: 500px; margin: 30px auto; padding: 20px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-align: left; }
+        .summary-box { background: #eef7ff; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 5px solid var(--accent); font-size: 0.9rem; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; margin-bottom: 3px; font-weight: bold; font-size: 0.9rem; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .btn-order { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 5px; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
+
         .bg-standard { background: var(--standard); color: white; }
-        .bg-veci { background: var(--veci); color: black; border: 2px solid black; }
-        
-        /* Grid i kartice crtaća */
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
-        .card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; border: 3px solid transparent; position: relative; height: 260px; display: flex; flex-direction: column; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .card.selected { border-color: var(--accent); box-shadow: 0 0 15px rgba(0,123,255,0.4); }
-        .card.selected::before { content: "✓"; position: absolute; top: 5px; right: 5px; background: var(--accent); color: white; width: 25px; height: 25px; border-radius: 50%; font-size: 16px; line-height: 25px; font-weight: bold; z-index: 5; }
-        .card img { width: 100%; height: 180px; object-fit: cover; background: #ddd; }
-        .card-title { padding: 8px; font-size: 0.75rem; font-weight: 600; color: #333; flex-grow: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f8f9fa; border-top: 1px solid #eee; }
-        
-        /* Forma za porudžbinu */
-        .order-form { background: white; max-width: 600px; margin: 50px auto; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: left; }
-        .summary-box { background: #eef7ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--accent); }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .form-group input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .btn-order { width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 5px; font-size: 1.2rem; font-weight: bold; cursor: pointer; }
+        .bg-veci { background: var(--veci); color: black; border: 1px solid black; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h1 style="margin:0 0 10px 0; letter-spacing: 2px;">SINHROMANIJA</h1>
-    
-    <p class="header-intro"><strong>Odaberi svoj spisak Disney crtaća po želji!</strong> 🎬✨</p>
+    <h1>SINHROMANIJA</h1>
+    <p class="header-intro"><strong>Izaberi svoj Disney spisak!</strong> 🎬✨</p>
     
     <div class="paketi-info">
-        <p>🎬 Cena Paketa 30 crtaća – <strong>1800 RSD</strong> + poštarina</p>
-        <p>🎬 Cena Paketa 50 crtaća – <strong>2300 RSD</strong> + poštarina</p>
+        <p>🎬 Paket 30 – <strong>1800 RSD</strong> + PTT</p>
+        <p>🎬 Paket 50 – <strong>2300 RSD</strong> + PTT</p>
     </div>
     
-    <p class="dostava-info">Slanje brzom poštom (Post express) 📦</p>
-    <p class="carolija-text">Odaberi svoje omiljene crtaće i prepusti se čaroliji Diznijevih priča! 🌈🎶</p>
+    <p class="dostava-info">Slanje Post Express-om 📦</p>
+    <span class="carolija-text">Odaberi crtaće i uživaj u čaroliji! 🌈🎶</span>
     
-    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 15px 0;">
-
     <div class="counter-box">Izabrano: <span id="currentCount">0</span> / 50</div>
     <div id="statusBadge" class="status-badge bg-standard">STANDARD PAKET (1800 din)</div>
 </div>
@@ -70,7 +102,7 @@
             <strong>Vaš izbor:</strong> <span id="finalCount">0</span> crtaća.<br>
             <strong>Cena: <span id="finalPrice">1800</span> din</strong>
         </div>
-        <form id="disneyForm" name="google-sheet">
+        <form id="disneyForm">
             <div class="form-group"><label>Ime i prezime</label><input type="text" name="ime" required></div>
             <div class="form-group"><label>Ulica i broj</label><input type="text" name="adresa" required></div>
             <div class="form-group"><label>Grad</label><input type="text" name="grad" required></div>
@@ -148,7 +180,7 @@
         })
         .catch(error => {
             console.error(error);
-            alert('Greška prilikom slanja! Proverite internet vezu.');
+            alert('Greška prilikom slanja!');
             btn.innerText = "POŠALJI NARUDŽBINU";
             btn.disabled = false;
         });
