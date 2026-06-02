@@ -7,18 +7,32 @@
     <style>
         :root { --primary: #051937; --standard: #2ecc71; --veci: #f1c40f; --accent: #007bff; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding-bottom: 50px; text-align: center; }
-        .header { position: sticky; top: 0; z-index: 1000; background: var(--primary); color: white; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-        .counter-box { font-size: 1.4rem; font-weight: bold; margin: 5px 0; }
+        
+        /* Stilovi za zaglavlje */
+        .header { position: sticky; top: 0; z-index: 1000; background: var(--primary); color: white; padding: 20px 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .header-intro { font-size: 1.2rem; margin: 5px 0 12px 0; }
+        .paketi-info { background: rgba(255, 255, 255, 0.1); display: inline-block; padding: 10px 20px; border-radius: 8px; margin: 10px 0; text-align: left; }
+        .paketi-info p { margin: 5px 0; font-size: 1rem; }
+        .dostava-info { font-size: 1rem; font-weight: bold; color: #f1c40f; margin: 5px 0; }
+        .carolija-text { font-style: italic; font-size: 0.95rem; opacity: 0.9; margin: 8px 0; }
+        
+        /* Brojač i komponente */
+        .counter-box { font-size: 1.4rem; font-weight: bold; margin: 10px 0 5px 0; }
         .status-badge { display: inline-block; padding: 6px 20px; border-radius: 20px; font-size: 0.9rem; text-transform: uppercase; font-weight: bold; }
         .bg-standard { background: var(--standard); color: white; }
         .bg-veci { background: var(--veci); color: black; border: 2px solid black; }
+        
+        /* Grid i kartice crtaća */
         .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
         .card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; border: 3px solid transparent; position: relative; height: 260px; display: flex; flex-direction: column; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .card.selected { border-color: var(--accent); box-shadow: 0 0 15px rgba(0,123,255,0.4); }
         .card.selected::before { content: "✓"; position: absolute; top: 5px; right: 5px; background: var(--accent); color: white; width: 25px; height: 25px; border-radius: 50%; font-size: 16px; line-height: 25px; font-weight: bold; z-index: 5; }
         .card img { width: 100%; height: 180px; object-fit: cover; background: #ddd; }
-        .card-title { padding: 8px; font-size: 0.75rem; font-weight: 600; color: #333; flex-grow: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .card-title { padding: 8px; font-size: 0.75rem; font-weight: 600; color: #333; flex-grow: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f8f9fa; border-top: 1px solid #eee; }
+        
+        /* Forma za porudžbinu */
         .order-form { background: white; max-width: 600px; margin: 50px auto; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: left; }
         .summary-box { background: #eef7ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--accent); }
         .form-group { margin-bottom: 15px; }
@@ -30,7 +44,20 @@
 <body>
 
 <div class="header">
-    <h1 style="margin:0; letter-spacing: 2px;">SINHROMANIJA</h1>
+    <h1 style="margin:0 0 10px 0; letter-spacing: 2px;">SINHROMANIJA</h1>
+    
+    <p class="header-intro"><strong>Odaberi svoj spisak Disney crtaća po želji!</strong> 🎬✨</p>
+    
+    <div class="paketi-info">
+        <p>🎬 Cena Paketa 30 crtaća – <strong>1800 RSD</strong> + poštarina</p>
+        <p>🎬 Cena Paketa 50 crtaća – <strong>2300 RSD</strong> + poštarina</p>
+    </div>
+    
+    <p class="dostava-info">Slanje brzom poštom (Post express) 📦</p>
+    <p class="carolija-text">Odaberi svoje omiljene crtaće i prepusti se čaroliji Diznijevih priča! 🌈🎶</p>
+    
+    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 15px 0;">
+
     <div class="counter-box">Izabrano: <span id="currentCount">0</span> / 50</div>
     <div id="statusBadge" class="status-badge bg-standard">STANDARD PAKET (1800 din)</div>
 </div>
@@ -64,7 +91,6 @@
         const div = document.createElement('div');
         div.className = 'card';
         const imgNum = index + 1;
-        // Pokušaj učitavanja ručne slike, ako nema - ostaje sivo dok ne dodaš slike na GitHub
         div.innerHTML = `<img src="${imgNum}.jpg" alt="${naslov}" onerror="this.style.display='none'">
                         <div class="card-title">${naslov}</div>`;
         
@@ -111,18 +137,21 @@
         btn.innerText = "SLANJE...";
         btn.disabled = true;
 
-        fetch(scriptURL, { method: 'POST', body: new FormData(this)})
-          .then(res => res.json())
-          .then(response => {
-              alert('Uspešno! Narudžbina je primljena.');
-              location.reload();
-          })
-          .catch(error => {
-              console.error(error);
-              alert('Greška! Proverite URL skripte.');
-              btn.innerText = "POŠALJI NARUDŽBINU";
-              btn.disabled = false;
-          });
+        fetch(scriptURL, { 
+            method: 'POST', 
+            body: new FormData(this),
+            mode: 'no-cors'
+        })
+        .then(() => {
+            alert('Uspešno! Narudžbina je primljena.');
+            location.reload();
+        })
+        .catch(error => {
+            console.error(error);
+            alert('Greška prilikom slanja! Proverite internet vezu.');
+            btn.innerText = "POŠALJI NARUDŽBINU";
+            btn.disabled = false;
+        });
     });
 </script>
 </body>
