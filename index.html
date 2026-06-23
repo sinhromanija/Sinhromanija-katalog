@@ -6,20 +6,24 @@
     <title>SINHROMANIJA - Katalog</title>
     <style>
         :root { --primary: #051937; --standard: #2ecc71; --veci: #f1c40f; --accent: #007bff; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding-bottom: 50px; text-align: center; }
         
-        /* Stilovi za zaglavlje - fiksirano samo na desktopu */
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background-color: #f0f2f5; 
+            margin: 0; 
+            padding-bottom: 50px; 
+            text-align: center; 
+        }
+        
+        /* Stilovi za zaglavlje - fiksirano i na desktopu i na telefonu */
         .header { 
-            position: relative; /* Podrazumevano nije fiksirano */
+            position: sticky; 
+            top: 0;
             z-index: 1000; 
             background: var(--primary); 
             color: white; 
             padding: 15px; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
-        }
-
-        @media (min-width: 768px) {
-            .header { position: sticky; top: 0; }
         }
 
         .header h1 { margin: 0 0 5px 0; letter-spacing: 2px; font-size: 1.8rem; }
